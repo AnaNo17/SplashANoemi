@@ -1,11 +1,10 @@
-package com.example.splashema.contract;
+package com.example.splashanoemi.contract;
 
 import android.content.ContentValues;
 import android.provider.BaseColumns;
-import android.util.Log;
 
-import com.example.splashema.Json.MyData;
-import com.example.splashema.Json.MyInfo;
+import com.example.splashanoemi.Json.MyData;
+import com.example.splashanoemi.Json.MyInfo;
 
 import java.io.Serializable;
 

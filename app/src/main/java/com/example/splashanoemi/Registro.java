@@ -1,5 +1,7 @@
 package com.example.splashanoemi;
 
+import static com.example.splashanoemi.Login.KEY;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.splashanoemi.Json.MyData;
 import com.example.splashanoemi.Json.MyInfo;
+import com.example.splashanoemi.des.MyDesUtil;
+import com.example.splashanoemi.service.BdContras;
+import com.example.splashanoemi.service.BdUser;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -31,7 +36,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 public class Registro extends AppCompatActivity {
     Switch SwitchH;
     RadioButton sexoB;
@@ -39,9 +43,10 @@ public class Registro extends AppCompatActivity {
     Button Registro;
     ImageButton Calendario;
     EditText FechaNac;
+    public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     List<MyData> lista;
-    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave, R.drawable.cerrar, R.drawable.llave};
-    private static final String TAG = "MainActivity";
+    int []images = { R.drawable.llave,R.drawable.cerrar,R.drawable.llave};
+    private static final String TAG = "Registro";
     public static final String archivo = "archivo.json";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     byte []res = null;
@@ -64,15 +69,14 @@ public class Registro extends AppCompatActivity {
         ImageButton calendario = findViewById(R.id.imageButton);
         RadioButton sexoB = findViewById(R.id.radioBMujer);
         Switch SwitchH = findViewById(R.id.idswitch);
-
         EditText usuario = findViewById(R.id.TxtUsu);
         EditText pswd = findViewById(R.id.TxtContra);
         EditText mail = findViewById(R.id.txtCorreo);
         EditText edad = findViewById(R.id.txtEdad);
-
         EditText FechaNac = findViewById(R.id.TxtNac);
         EditText Telefono = findViewById(R.id.TxtTel);
         CheckBox trabajador = findViewById(R.id.checkBoxEsTra);
+
 
 
 
@@ -105,7 +109,17 @@ public class Registro extends AppCompatActivity {
         Registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                BdContras contrasbd = null;
+                contrasbd = new BdContras(getBaseContext());
+                BdUser usuariosDB = null;
+                usuariosDB = new BdUser( getBaseContext( ) );
+                int id = 1;
+                if(usuariosDB.getUsuarios() == null){
+                    id = 1;
+                }
+                else{
+                    id = usuariosDB.getUsuarios().size();
+                }
                 res = createSha1(String.valueOf(pswd.getText())+"ola");
                 if( res != null ) {
                     Log.d(TAG, String.format("%s", bytesToHex(res)));
@@ -128,9 +142,9 @@ public class Registro extends AppCompatActivity {
                 }
 
                 if(SwitchH.isChecked()){
-                    mascotas = "Tiene mascotas";
+                    mascotas = "Con mascotas";
                 }else{
-                    mascotas = "No tiene mascotas";
+                    mascotas = "Sin mascotas";
                 }
                 MyData myData = null;
                 for( int i = 0; i < 3; i++)
@@ -140,18 +154,27 @@ public class Registro extends AppCompatActivity {
                     if(i==0){
                         myData.setRed(String.format( "Facebook"));
                         myData.setImage(images[0]);
+                        myData.setIdContra(id);
                     }
                     if(i==1){
-                        myData.setRed(String.format( "Servicio Social"));
+                        myData.setRed(String.format( "Instagram"));
                         myData.setImage(images[1]);
+                        myData.setIdContra(id);
                     }
                     if(i==2){
-                        myData.setRed(String.format( "PoliVirtual" ));
-                        myData.setImage(images[0]);
+                        myData.setRed(String.format( "Whatsapp" ));
+                        myData.setImage(images[2]);
+                        myData.setIdContra(id);
+                    }
+                    if(contrasbd.saveContra(myData)){
+                        Log.d(TAG,"Contraseña guardada");
                     }
                     lista.add(myData);
                 }
+                //List<MyInfo> usuarios = null;
+
                 MyInfo info= new MyInfo();
+                info.setIdUser(id);
                 info.setUsuario(String.valueOf(usuario.getText()));
                 info.setPassword(pass);
                 info.setCorreo(String.valueOf(mail.getText()));
@@ -162,7 +185,11 @@ public class Registro extends AppCompatActivity {
                 info.setTelefono(String.valueOf(Telefono.getText()));
                 info.setFechaNac(String.valueOf(FechaNac.getText()));
                 info.setContras(lista);
-                List2Json(info,list);
+                //List2Json(info,list);
+                if(usuariosDB.saveUsuario(info)){
+                    Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
@@ -182,10 +209,19 @@ public class Registro extends AppCompatActivity {
     }
     public void List2Json(MyInfo info,List<MyInfo> list){
         Gson gson =null;
+        MyDesUtil myDesUtil = null;
         String json= null;
+        String json2= null;
         gson =new Gson();
+        myDesUtil = new MyDesUtil();
         list.add(info);
-        json =gson.toJson(list, ArrayList.class);
+        json2 =gson.toJson(list, ArrayList.class);
+        if( isNotNullAndNotEmpty( KEY ) )
+        {
+            myDesUtil.addStringKeyBase64( KEY );
+        }
+        json= myDesUtil.cifrar(json2);
+
         if (json == null)
         {
             Log.d(TAG, "Error json");
@@ -254,5 +290,8 @@ public class Registro extends AppCompatActivity {
         }
         return new String(hexChars);
     }
-
+    public boolean isNotNullAndNotEmpty( String aux )
+    {
+        return aux != null && aux.length() > 0;
+    }
 }

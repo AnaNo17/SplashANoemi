@@ -1,18 +1,12 @@
-package com.example.splashema.service;
+package com.example.splashanoemi.service;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.splashema.Json.MyInfo;
-import com.example.splashema.contract.UsuariosContract;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.splashanoemi.contract.UsuariosContract;
 
 public class UsuariosDBService extends SQLiteOpenHelper {
     public static final String TAG = "UsuariosDBService";

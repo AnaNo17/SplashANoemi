@@ -1,6 +1,7 @@
 package com.example.splashanoemi;
 
 import static com.example.splashanoemi.Registro.archivo;
+import static com.example.splashanoemi.olvideContra.KEY;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.splashanoemi.Json.MyData;
 import com.example.splashanoemi.Json.MyInfo;
+import com.example.splashanoemi.des.MyDesUtil;
+import com.example.splashanoemi.service.BdContras;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -29,10 +32,12 @@ public class Agregarcontra extends AppCompatActivity {
     public static String TAG = "mensaje";
     private List<MyData> lista;
     Button regiscontra;
+    public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     private EditText contra2, red;
     private TextView contrasena, red2;
-    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave};
 
+    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave,
+            R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,16 +57,20 @@ public class Agregarcontra extends AppCompatActivity {
                 MyData myData = null;
                 Object object = null;
                 MyInfo info = null;
+                BdContras contrasbd = null;
+                contrasbd = new BdContras(getBaseContext());
                 object = intent.getExtras().get("MyInfo");
                 info = (MyInfo) object;
-                lista = info.getContras();
+                lista = contrasbd.getContras(info.getIdUser());
                 myData = new MyData();
+                myData.setIdContra(info.getIdUser());
                 myData.setContra(String.valueOf(contrasena.getText()));
                 myData.setRed(String.valueOf(red.getText()));
                 myData.setImage(images[lista.size()]);
+                contrasbd.saveContra(myData);
                 lista.add(myData);
                 info.setContras(lista);
-                List2Json(info,list);
+                //List2Json(info,list);
                 Intent intent = new Intent(Agregarcontra.this, Principal.class);
                 intent.putExtra("MyInfo", info);
                 startActivity(intent);
@@ -71,10 +80,19 @@ public class Agregarcontra extends AppCompatActivity {
     }
     public void List2Json(MyInfo info,List<MyInfo> list){
         Gson gson =null;
+        MyDesUtil myDesUtil = null;
         String json= null;
+        String json2= null;
         gson =new Gson();
+        myDesUtil = new MyDesUtil();
         list.add(info);
-        json =gson.toJson(list, ArrayList.class);
+        json2 =gson.toJson(list, ArrayList.class);
+        if( isNotNullAndNotEmpty( KEY ) )
+        {
+            myDesUtil.addStringKeyBase64( KEY );
+        }
+        json= myDesUtil.cifrar(json2);
+
         if (json == null)
         {
             Log.d(TAG, "Error json");
@@ -85,6 +103,10 @@ public class Agregarcontra extends AppCompatActivity {
             writeFile(json);
         }
         Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+    }
+    public boolean isNotNullAndNotEmpty( String aux )
+    {
+        return aux != null && aux.length() > 0;
     }
     private boolean writeFile(String text){
         File file =null;

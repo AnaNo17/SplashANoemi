@@ -2,6 +2,7 @@ package com.example.splashanoemi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,30 +19,44 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.splashanoemi.Json.MyData;
 import com.example.splashanoemi.Json.MyInfo;
 import com.example.splashanoemi.MyAdapter.MyAdapter;
+import com.example.splashanoemi.service.BdContras;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Principal extends AppCompatActivity {
     private TextView usuario;
-    Button regresor;
+    Button regresor, api;
     private ListView listView;
     private List<MyData> list;
     public static String TAG = "ola";
-    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave, R.drawable.cerrar,R.drawable.llave};
+    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,
+            R.drawable.llave, R.drawable.cerrar,R.drawable.llave};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+        int idusu = 0;
         String aux = null;
         MyInfo info = null;
         Object object = null;
         MyData myData = null;
+        BdContras contrasbd = null;
+        contrasbd = new BdContras(getBaseContext());
+
         usuario = findViewById(R.id.textUser);
         Intent intent = getIntent();
         listView = (ListView) findViewById(R.id.listViewId);
-        list = new ArrayList<MyData>();
+        api= (Button)findViewById(R.id.buttonApi);
+        api.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent api = new Intent(Principal.this, ApiPlus.class);
+                startActivity(api);
+            }
+        });
+
 
         regresor= (Button)findViewById(R.id.salir);
         regresor.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +66,7 @@ public class Principal extends AppCompatActivity {
                 startActivity(regresador);
             }
         });
+        list = new ArrayList<MyData>();
         if( intent != null)
         {
             aux = intent.getStringExtra("Usuario" );
@@ -63,8 +79,13 @@ public class Principal extends AppCompatActivity {
                 if (object != null) {
                     if (object instanceof MyInfo) {
                         info = (MyInfo) object;
-                        usuario.setText("Bienvenid@ " + info.getUsuario() );
-                        list = info.getContras();
+                        usuario.setText("Bienvenid@ " + info.getUsuario());
+                        idusu = info.getIdUser();
+                        Log.d(TAG, String.valueOf(idusu));
+                        list = contrasbd.getContras(idusu);
+                        if(list == null){
+                            Toast.makeText(getBaseContext(), "No hay contraseñas registradas en la BD", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }

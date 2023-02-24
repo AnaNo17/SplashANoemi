@@ -1,4 +1,4 @@
-package com.example.splashema.service;
+package com.example.splashanoemi.service;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.splashema.Json.MyInfo;
-import com.example.splashema.contract.UsuariosContract;
+import com.example.splashanoemi.Json.MyInfo;
+import com.example.splashanoemi.contract.UsuariosContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ public class BdUser extends UsuariosDBService{
     public boolean saveUsuario(MyInfo info){
         boolean correcto = false;
         try{
-
             UsuariosDBService usuariosDBService = new UsuariosDBService(context);
             SQLiteDatabase db =usuariosDBService.getWritableDatabase();
             ContentValues values= new ContentValues();

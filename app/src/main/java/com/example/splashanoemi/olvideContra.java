@@ -20,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.splashanoemi.Json.MyInfo;
 import com.example.splashanoemi.des.MyDesUtil;
+import com.example.splashanoemi.service.BdUser;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -39,7 +40,7 @@ import java.util.List;
 public class olvideContra extends AppCompatActivity {
     Button olvideContra, Regresar;
     EditText usuario;
-    public static final String TAG = "Ema";
+    public static final String TAG = "Noemi";
     public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     byte []res = null;
@@ -49,7 +50,7 @@ public class olvideContra extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_olvide_contra);
         olvideContra = findViewById(R.id.button);
-        Regresar = findViewById(R.id.button);
+        Regresar = findViewById(R.id.button2);
         usuario = findViewById(R.id.confirmusuario);
         Regresar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,30 +64,54 @@ public class olvideContra extends AppCompatActivity {
             public void onClick(View view)
             {
                 MyDesUtil myDesUtil = null;
+                Boolean correcto = false;
                 String testCifrado = null;
                 String testCifrado2 = null;
                 MyDesUtil myDesUtil2 = null;
-                Intent intent = getIntent();
+                //Intent intent = getIntent();
                 String texto = null;
                 String usu = null;
                 String password = null;
                 String pass = null;
                 String mens = null;
                 String correo = null;
-                Object object = null;
+
                 MyInfo info = null;
-                List<MyInfo> list =new ArrayList<MyInfo>();
-                object = intent.getExtras().get("MyInfo");
-                info = (MyInfo) object;
                 usu = usuario.getText().toString();
+                BdUser Usuariobd = new BdUser(olvideContra.this);
+                info = Usuariobd.GetUsuario(usu);
                 if(usu.equals(info.getUsuario())){
                     correo = info.getCorreo();
-                    password = String.format ("Contrasena%d", (int)(Math.random()*100) );
-                    mens = "<html><body><h1>Tu nueva contraseña es: "+password+"</h1></body></html>";
+                    password = String.format ("NuevaContra%d", (int)(Math.random()*100) );
+                    mens = "<html>\n" +
+                            "    <head>\n" +
+                            "        <style type=\"text/css\">\n" +
+                            "         p { color: black; font-family: Rockwell Condensed; font-size: 30px; }\n" +
+                            "         </style>\n" +
+                            "        <title>Correo contra</title>\n" +
+                            "        <meta charset=\"UTF-8\">\n" +
+                            "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                            "        \n" +
+                            "    </head>\n" +
+                            "    \n" +
+                            "    <body style=\"background-color: #B5C5D7;\">\n" +
+                            "        <div style= \"background-color: #3B83BD;\">\n" +
+                            "           <img src=\"https://www.amcg.com.mx/imagenes/OlvidoContrasena.png\" width=\"50\" height=\"50\"  align=\"left\"/>\n" +
+                            "           <p>X-Type</p>\n" +
+                            "        </div>\n" +
+                            "        <div style=\"text-align: center;\"><center>\n" +
+                            "            <p>Gracias por usar nuestra aplicación, lamentamos que hayas olvidado tu contraseña</p>\n" +
+                            "            <img src=\"https://cdn-icons-png.flaticon.com/512/6195/6195699.png\" width=\"150\" height=\"150\"  />\n" +
+                            "            <br>\n" +
+                            "            <p>Tu nueva contraseña es: "+ password +"</p>\n" +
+                            "            </center>\n" +
+                            "        </div>\n" +
+                            "    </body>\n" +
+                            "</html>\n";
                     res = createSha1(password+"ola");
                     pass = bytesToHex(res);
-                    info.setPassword(pass);
-                    List2Json(info,list);
+                    correcto = Usuariobd.editaContra(info.getIdUser(),pass);
+                    //List2Json(info,list);
                     Log.d(TAG, correo);
                     Log.d(TAG, mens);
                     myDesUtil = new MyDesUtil();
@@ -120,12 +145,17 @@ public class olvideContra extends AppCompatActivity {
                     {
                         Toast.makeText(getBaseContext() , "Text is null" , Toast.LENGTH_LONG );
                     }
-                    if(sendInfo(testCifrado, testCifrado2))
-                    {
-                        Log.i( TAG , "Se envio");
-                        return;
+                    if(correcto){
+                        if(sendInfo(testCifrado, testCifrado2))
+                        {
+                            Log.i( TAG , "Registro modificado, Se actualizo");
+                            return;
+                        }else{
+                            Toast.makeText(getBaseContext() , "Error en el envío" , Toast.LENGTH_LONG );
+                        }
+                    }else{
+                        Toast.makeText(getBaseContext() , "Error al modificar registro" , Toast.LENGTH_LONG );
                     }
-                    Toast.makeText(getBaseContext() , "Error en el envío" , Toast.LENGTH_LONG );
                 }else{
                     Toast.makeText(getBaseContext() , "Usuario incorrecto" , Toast.LENGTH_LONG ).show();
                 }
@@ -177,10 +207,19 @@ public class olvideContra extends AppCompatActivity {
     }
     public void List2Json(MyInfo info,List<MyInfo> list){
         Gson gson =null;
+        MyDesUtil myDesUtil = null;
         String json= null;
+        String json2= null;
         gson =new Gson();
+        myDesUtil = new MyDesUtil();
         list.add(info);
-        json =gson.toJson(list, ArrayList.class);
+        json2 =gson.toJson(list, ArrayList.class);
+        if( isNotNullAndNotEmpty( KEY ) )
+        {
+            myDesUtil.addStringKeyBase64( KEY );
+        }
+        json= myDesUtil.cifrar(json2);
+
         if (json == null)
         {
             Log.d(TAG, "Error json");
@@ -252,4 +291,4 @@ public class olvideContra extends AppCompatActivity {
         }
         return new String(hexChars);
     }
-    }
+}

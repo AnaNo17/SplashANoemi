@@ -1,4 +1,4 @@
-package com.fabianpalacios.superhero.Services.model;
+package com.example.splashanoemi.model;
 
 import java.util.List;
 

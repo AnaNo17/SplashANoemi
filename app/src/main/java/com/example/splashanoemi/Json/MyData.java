@@ -22,6 +22,25 @@ public class MyData implements Serializable {
     private String contra;
     private int image;
 
+    public int getIdContra() {
+        return idContra;
+    }
+
+    public void setIdContra(int idContra) {
+        this.idContra = idContra;
+    }
+
+    private int idContra;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
     public String getRed() {
         return red;
     }

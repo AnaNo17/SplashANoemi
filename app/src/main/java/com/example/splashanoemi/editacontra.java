@@ -1,6 +1,7 @@
 package com.example.splashanoemi;
 
 import static com.example.splashanoemi.Registro.archivo;
+import static com.example.splashanoemi.olvideContra.KEY;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.splashanoemi.Json.MyData;
 import com.example.splashanoemi.Json.MyInfo;
 import com.example.splashanoemi.MyAdapter.MyAdapter;
+import com.example.splashanoemi.des.MyDesUtil;
+import com.example.splashanoemi.service.BdContras;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -35,7 +38,9 @@ public class editacontra extends AppCompatActivity {
     private ListView listView;
     private EditText contra, red;
     private TextView indice;
-    private int []images = { R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar,R.drawable.llave};
+    public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
+    private int []images = { R.drawable.cerrar,R.drawable.llave,
+            R.drawable.cerrar,R.drawable.llave,R.drawable.cerrar};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +51,13 @@ public class editacontra extends AppCompatActivity {
         Intent intent = getIntent();
         Object object = null;
         MyInfo info = null;
+        int idusu;
         object = intent.getExtras().get("MyInfo");
         info = (MyInfo) object;
-        lista = info.getContras();
+        BdContras contrasbd = null;
+        contrasbd = new BdContras(getBaseContext());
+        idusu = info.getIdUser();
+        lista = contrasbd.getContras(idusu);
         contra = findViewById(R.id.contra);
         red = findViewById(R.id.socialred);
         indice = findViewById(R.id.indice);
@@ -71,29 +80,46 @@ public class editacontra extends AppCompatActivity {
                 Object object = null;
                 MyInfo info = null;
                 int i = 0;
+                BdContras contrasbd = null;
+                contrasbd = new BdContras(getBaseContext());
                 i= Integer.parseInt(String.valueOf(indice.getText()));
+                Log.d(TAG, String.valueOf(i));
                 lista.get(i).setContra(String.valueOf(contra.getText()));
                 lista.get(i).setRed(String.valueOf(red.getText()));
-                List<MyInfo> list =new ArrayList<MyInfo>();
+
+                if(contrasbd.editaContras((i+1),String.valueOf(contra.getText()),String.valueOf(red.getText()))){
+                    Log.d(TAG, "La contraseña ha sido editada");
+                }else{
+                    Log.d(TAG, "La contraseña no se edito");
+                }
                 object = intent.getExtras().get("MyInfo");
                 info = (MyInfo) object;
                 info.setContras(lista);
-                List2Json(info,list);
+
                 Intent intent2 = new Intent(editacontra.this, Principal.class);
                 intent2.putExtra("MyInfo", info);
                 startActivity(intent2);
             }
         });
     }
-    public void List2Json(MyInfo info, List<MyInfo> list){
+    public void List2Json(MyInfo info,List<MyInfo> list){
         Gson gson =null;
+        MyDesUtil myDesUtil = null;
         String json= null;
+        String json2= null;
         gson =new Gson();
+        myDesUtil = new MyDesUtil();
         list.add(info);
-        json =gson.toJson(list, ArrayList.class);
+        json2 =gson.toJson(list, ArrayList.class);
+        if( isNotNullAndNotEmpty( KEY ) )
+        {
+            myDesUtil.addStringKeyBase64( KEY );
+        }
+        json= myDesUtil.cifrar(json2);
+
         if (json == null)
         {
-            Log.d(TAG, "Error json");
+            Log.d(TAG, "Error BD");
         }
         else
         {
@@ -101,6 +127,10 @@ public class editacontra extends AppCompatActivity {
             writeFile(json);
         }
         Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+    }
+    public boolean isNotNullAndNotEmpty( String aux )
+    {
+        return aux != null && aux.length() > 0;
     }
     private boolean writeFile(String text){
         File file =null;
@@ -128,7 +158,6 @@ public class editacontra extends AppCompatActivity {
     }
     public int toast(int i)
     {
-        Toast.makeText(getBaseContext(),"Estas a punto de editar", Toast.LENGTH_SHORT).show();
         return i;
     }
 }

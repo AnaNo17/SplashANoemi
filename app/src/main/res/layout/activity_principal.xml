@@ -15,25 +15,11 @@
         android:fontFamily="sans-serif-black"
         android:text="Que gusto verte de nuevo, estas son tus contraseñas guardadas:"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.215" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="238dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="104dp"
-        android:fontFamily="sans-serif-black"
-        android:text="¡No olvides pasar por el menú desplegable!"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.749" />
 
     <TextView
         android:id="@+id/textUser"
@@ -68,10 +54,22 @@
         android:text="Salir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listViewId"
-        app:layout_constraintVertical_bias="0.779" />
+        app:layout_constraintVertical_bias="0.771" />
+
+    <Button
+        android:id="@+id/buttonApi"
+        android:layout_width="179dp"
+        android:layout_height="61dp"
+        android:backgroundTint="#6079c5"
+        android:text="Super Heroes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listViewId"
+        app:layout_constraintVertical_bias="0.241" />
 
     <ImageView
         android:id="@+id/imageView8"

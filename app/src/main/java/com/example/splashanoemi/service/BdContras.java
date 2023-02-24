@@ -1,4 +1,4 @@
-package com.example.splashema.service;
+package com.example.splashanoemi.service;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,12 +8,11 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.splashema.Json.MyData;
-import com.example.splashema.contract.UsuariosContract;
+import com.example.splashanoemi.Json.MyData;
+import com.example.splashanoemi.contract.UsuariosContract;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class BdContras extends UsuariosDBService{
     Context context;
 
@@ -74,13 +73,27 @@ public class BdContras extends UsuariosDBService{
         }
         return contras;
     }
-    public boolean editaContras(int id, String contra, int image, String red){
+    public boolean editaContras(int id, String contra, String red){
         boolean correcto = false;
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         try{
-            sqLiteDatabase.execSQL("UPDATE "+TABLE_CONTRAS+" SET contra = '"+contra+" , imagen = "+image+", red = "+red+"' WHERE idcontra ='"+id+"'");
+            sqLiteDatabase.execSQL("UPDATE "+TABLE_CONTRAS+" SET contra = '"+contra+"', red = '"+red+"' WHERE id_contra ='"+id+"'");
             correcto = true;
+        }catch (Exception ex){
+            ex.toString();
+            correcto = false;
+        }finally {
+            sqLiteDatabase.close();
+        }
+        return correcto;
+    }
+    public boolean eliminaContra(String Contra, int id){
+        boolean correcto = false;
+        SQLiteDatabase sqLiteDatabase = null;
+        sqLiteDatabase = getWritableDatabase();
+        try{
+            sqLiteDatabase.execSQL("DELETE FROM "+TABLE_CONTRAS+" WHERE contra ='"+Contra+"' and idusu = '"+id+"'");
         }catch (Exception ex){
             ex.toString();
             correcto = false;

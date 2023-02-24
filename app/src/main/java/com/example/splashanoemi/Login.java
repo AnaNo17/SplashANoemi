@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.splashanoemi.Json.MyInfo;
+import com.example.splashanoemi.des.MyDesUtil;
+import com.example.splashanoemi.service.BdUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -30,12 +32,15 @@ public class Login extends AppCompatActivity {
 
     Button registro;
     private List<MyInfo> list;
-    public static String TAG = "mensaje";
+    public static String TAG = "Login";
     String json = null;
+    public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
+    String json2 = null;
     public static String usr;
 
+    //modificacion de validar
     private EditText pswds, usuario;
-    private TextView Txtpas, Txtusu;
+    private TextView txtpas, txtusu;
 
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     byte[] res = null;
@@ -48,6 +53,11 @@ public class Login extends AppCompatActivity {
 
 
         registro = (Button) findViewById(R.id.RegistroB);
+        BdUser Usuariobd = new BdUser(Login.this);
+        if(Usuariobd.getUsuarios() == null){
+            Toast.makeText(getApplicationContext(), "No hay usuarios registrados", Toast.LENGTH_LONG).show();
+        }
+
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,13 +68,13 @@ public class Login extends AppCompatActivity {
         Button button2 = findViewById(R.id.accesarB);
         usuario = findViewById(R.id.userNameId);
 
-
-        Txtpas = findViewById(R.id.passwordId);
-        Txtusu = findViewById(R.id.userNameId);
+        //modificacion validar
+        txtpas = findViewById(R.id.passwordId);
+        txtusu = findViewById(R.id.userNameId);
 
         pswds = findViewById(R.id.passwordId);
-        Read();
-        json2List(json);
+        //Read();
+        //json2List(json);
 
 
         button2.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +90,7 @@ public class Login extends AppCompatActivity {
                         }
                         acceso();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Por favor complete todos los campos", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Complete todos los campos", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), String.format(String.valueOf(e)), Toast.LENGTH_LONG).show();
@@ -93,11 +103,8 @@ public class Login extends AppCompatActivity {
         OlvideContra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (MyInfo myInfo : list) {
-                    Intent olvideContra = new Intent(Login.this, olvideContra.class);
-                    olvideContra.putExtra("MyInfo", myInfo);
-                    startActivity(olvideContra);
-                }
+                Intent olvideContra = new Intent(Login.this, olvideContra.class);
+                startActivity(olvideContra);
             }
         });
         //hasta aqui la funcionalidad de botones
@@ -108,13 +115,13 @@ public class Login extends AppCompatActivity {
         usuario1 = usuario.getText().toString();
         password = pswds.getText().toString();
         if (usuario1.isEmpty()) {
-            Txtusu.setError("Ingrese su usuario");
+            txtusu.setError("Ingrese su usuario");
             retorno = false;
         } else {
 
         }
         if (password.isEmpty()) {
-            Txtpas.setError("Ingrese su contraseña");
+            txtpas.setError("Ingrese su contraseña");
             retorno = false;
         } else {
 
@@ -125,6 +132,8 @@ public class Login extends AppCompatActivity {
         if (!isFileExits()) {
             return false;
         }
+        MyDesUtil myDesUtil = null;
+        myDesUtil = new MyDesUtil();
         File file = getFile();
         FileInputStream fileInputStream = null;
         byte[] bytes = null;
@@ -132,8 +141,16 @@ public class Login extends AppCompatActivity {
         try {
             fileInputStream = new FileInputStream(file);
             fileInputStream.read(bytes);
-            json = new String(bytes);
-            Log.d(TAG, json);
+            json2 = new String(bytes);
+            Log.d(TAG, json2);
+            if( isNotNullAndNotEmpty( KEY ) )
+            {
+                myDesUtil.addStringKeyBase64( KEY );
+            }
+            json = myDesUtil.desCifrar(json2);
+            if(!json.isEmpty()) {
+                Log.d(TAG, json);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -141,12 +158,16 @@ public class Login extends AppCompatActivity {
         }
         return false;
     }
+    public boolean isNotNullAndNotEmpty( String aux )
+    {
+        return aux != null && aux.length() > 0;
+    }
 
     public void json2List(String json) {
         Gson gson = null;
         String mensaje = null;
         if (json == null || json.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Error json null or empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Error BD null or empty", Toast.LENGTH_LONG).show();
             return;
         }
         gson = new Gson();
@@ -174,17 +195,22 @@ public class Login extends AppCompatActivity {
 
     public void acceso() {
         int i = 0;
-        for (MyInfo myInfo : list) {
-            if (myInfo.getUsuario().equals(usr) && myInfo.getPassword().equals(pass)) {
+        BdUser Usuariobd = new BdUser(Login.this);
+        MyInfo myInfo2 = Usuariobd.GetUsuario(usr);
+        if(myInfo2 == null){
+            Toast.makeText(getApplicationContext(), "Error en la BD", Toast.LENGTH_LONG).show();
+        }else{
+            if (myInfo2.getUsuario().equals(usr) && myInfo2.getPassword().equals(pass)) {
+                Toast.makeText(getApplicationContext(), "Inicio de sesión correcto", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Login.this, Principal.class);
-                intent.putExtra( "MyInfo" , myInfo );
+                intent.putExtra("MyInfo", myInfo2);
                 startActivity(intent);
                 i = 1;
             }
-        }
-        if (i == 0) {
-            Toast.makeText(getApplicationContext(), "El usuario o contraseña son incorrectos", Toast.LENGTH_LONG).show();
-            Log.d(TAG, pass);
+            if (i == 0) {
+                Toast.makeText(getApplicationContext(), "El usuario o contraseña son incorrectos", Toast.LENGTH_LONG).show();
+                Log.d(TAG, pass);
+            }
         }
     }
 
@@ -215,7 +241,5 @@ public class Login extends AppCompatActivity {
         }
         return new String(hexChars);
 
-    }//modificacion validar
-
-
+    }
 }

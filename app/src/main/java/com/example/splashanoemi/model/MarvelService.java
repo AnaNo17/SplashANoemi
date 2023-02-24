@@ -1,13 +1,10 @@
-package com.fabianpalacios.superhero.Services.model;
+package com.example.splashanoemi.model;
 
 import android.util.Log;
-
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-
 
 import cafsoft.foundation.HTTPURLResponse;
 import cafsoft.foundation.URLComponents;

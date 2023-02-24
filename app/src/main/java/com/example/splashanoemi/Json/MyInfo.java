@@ -3,6 +3,15 @@ import java.io.Serializable;
 import java.util.List;
 
 public class MyInfo implements Serializable {
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
+    }
+
+    private int idUser;
     private String usuario;
     private String password;
     private String correo;
@@ -13,13 +22,22 @@ public class MyInfo implements Serializable {
     private String Telefono;
     private String FechaNac;
     private List<MyData> contras;
-
     public List<MyData> getContras() {
         return contras;
     }
-
     public void setContras(List<MyData> contras) {
         this.contras = contras;
+    }
+    public MyInfo(String usuario, String password, String correo,String edad, String sexo, String Tusu, String hijos, String Telefono, String FechaNac) {
+        this.usuario = usuario;
+        this.password = password;
+        this.correo = correo;
+        this.edad = edad;
+        this.sexo = sexo;
+        this.Tusu =Tusu;
+        this.mascotas = mascotas;
+        this.Telefono =Telefono;
+        this.FechaNac = FechaNac;
     }
 
     public MyInfo() {
@@ -39,12 +57,7 @@ public class MyInfo implements Serializable {
     public String getCorreo() {
         return correo;
     }
-    public void setedad(String edad) {
-        this.edad = edad;
-    }
-    public String getedad() {
-        return edad;
-    }
+
     public void setCorreo(String correo) {
         this.correo = correo;
     }

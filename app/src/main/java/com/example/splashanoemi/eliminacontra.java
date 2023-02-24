@@ -1,6 +1,7 @@
 package com.example.splashanoemi;
 
 import static com.example.splashanoemi.Registro.archivo;
+import static com.example.splashanoemi.olvideContra.KEY;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.splashanoemi.Json.MyData;
 import com.example.splashanoemi.Json.MyInfo;
 import com.example.splashanoemi.MyAdapter.MyAdapter;
+import com.example.splashanoemi.des.MyDesUtil;
+import com.example.splashanoemi.service.BdContras;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -32,6 +35,7 @@ public class eliminacontra extends AppCompatActivity {
     public static String TAG = "mensaje";
     private List<MyData> lista;
     Button eliminacontra;
+    public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     private ListView listView;
     private EditText contra2, red;
     private TextView contrasena, red2;
@@ -67,7 +71,7 @@ public class eliminacontra extends AppCompatActivity {
                 object = intent.getExtras().get("MyInfo");
                 info = (MyInfo) object;
                 info.setContras(lista);
-                List2Json(info,list);
+                //List2Json(info,list);
                 Intent intent2 = new Intent(eliminacontra.this, Principal.class);
                 intent2.putExtra("MyInfo", info);
                 startActivity(intent2);
@@ -77,13 +81,22 @@ public class eliminacontra extends AppCompatActivity {
     }
     public void List2Json(MyInfo info,List<MyInfo> list){
         Gson gson =null;
+        MyDesUtil myDesUtil = null;
         String json= null;
+        String json2= null;
         gson =new Gson();
+        myDesUtil = new MyDesUtil();
         list.add(info);
-        json =gson.toJson(list, ArrayList.class);
+        json2 =gson.toJson(list, ArrayList.class);
+        if( isNotNullAndNotEmpty( KEY ) )
+        {
+            myDesUtil.addStringKeyBase64( KEY );
+        }
+        json= myDesUtil.cifrar(json2);
+
         if (json == null)
         {
-            Log.d(TAG, "Error json");
+            Log.d(TAG, "Error BD");
         }
         else
         {
@@ -91,6 +104,10 @@ public class eliminacontra extends AppCompatActivity {
             writeFile(json);
         }
         Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+    }
+    public boolean isNotNullAndNotEmpty( String aux )
+    {
+        return aux != null && aux.length() > 0;
     }
     private boolean writeFile(String text){
         File file =null;
@@ -118,8 +135,11 @@ public class eliminacontra extends AppCompatActivity {
     }
     private int toast(int i)
     {
+        BdContras contrasbd = null;
+        contrasbd = new BdContras(getBaseContext());
+        contrasbd.eliminaContra(lista.get(i).getContra(), lista.get(i).getIdContra());
         lista.remove(i);
-        Toast.makeText(getBaseContext(),"Se elimino la contraseña", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(),"Contraseña eliminada", Toast.LENGTH_SHORT).show();
         return lista.size();
     }
 }
