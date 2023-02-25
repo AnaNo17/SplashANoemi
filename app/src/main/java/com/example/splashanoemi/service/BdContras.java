@@ -73,12 +73,12 @@ public class BdContras extends UsuariosDBService{
         }
         return contras;
     }
-    public boolean editaContras(int id, String contra, String red){
+    public boolean editaContras(int id, int imagen, String contra, String red){
         boolean correcto = false;
         SQLiteDatabase sqLiteDatabase = null;
         sqLiteDatabase = getWritableDatabase();
         try{
-            sqLiteDatabase.execSQL("UPDATE "+TABLE_CONTRAS+" SET contra = '"+contra+"', red = '"+red+"' WHERE id_contra ='"+id+"'");
+            sqLiteDatabase.execSQL("UPDATE "+TABLE_CONTRAS+" SET contra = '"+contra+"', red = '"+red+"' WHERE imagen = '"+imagen+"' and idusu ='"+id+"'");
             correcto = true;
         }catch (Exception ex){
             ex.toString();

@@ -118,7 +118,7 @@ public class Registro extends AppCompatActivity {
                     id = 1;
                 }
                 else{
-                    id = usuariosDB.getUsuarios().size();
+                    id = (usuariosDB.getUsuarios().size())+1;
                 }
                 res = createSha1(String.valueOf(pswd.getText())+"ola");
                 if( res != null ) {
@@ -152,17 +152,17 @@ public class Registro extends AppCompatActivity {
                     myData = new MyData();
                     myData.setContra( String.format( "Contraseña%d" , (int)(Math.random()*10000) ) );
                     if(i==0){
-                        myData.setRed(String.format( "Facebook"));
+                        myData.setRed(String.format( "Saes"));
                         myData.setImage(images[0]);
                         myData.setIdContra(id);
                     }
                     if(i==1){
-                        myData.setRed(String.format( "Instagram"));
+                        myData.setRed(String.format( "Correo"));
                         myData.setImage(images[1]);
                         myData.setIdContra(id);
                     }
                     if(i==2){
-                        myData.setRed(String.format( "Whatsapp" ));
+                        myData.setRed(String.format( "Insta" ));
                         myData.setImage(images[2]);
                         myData.setIdContra(id);
                     }

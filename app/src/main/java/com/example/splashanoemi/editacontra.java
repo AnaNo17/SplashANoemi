@@ -82,20 +82,20 @@ public class editacontra extends AppCompatActivity {
                 int i = 0;
                 BdContras contrasbd = null;
                 contrasbd = new BdContras(getBaseContext());
+                object = intent.getExtras().get("MyInfo");
+                info = (MyInfo) object;
                 i= Integer.parseInt(String.valueOf(indice.getText()));
                 Log.d(TAG, String.valueOf(i));
                 lista.get(i).setContra(String.valueOf(contra.getText()));
                 lista.get(i).setRed(String.valueOf(red.getText()));
-
-                if(contrasbd.editaContras((i+1),String.valueOf(contra.getText()),String.valueOf(red.getText()))){
-                    Log.d(TAG, "La contraseña ha sido editada");
+                //List<MyInfo> list =new ArrayList<MyInfo>();
+                if(contrasbd.editaContras((info.getIdUser()), lista.get(i).getImage(), String.valueOf(contra.getText()),String.valueOf(red.getText()))){
+                    Log.d(TAG, "Contraseña editada");
                 }else{
-                    Log.d(TAG, "La contraseña no se edito");
+                    Log.d(TAG, "Contraseña no editada");
                 }
-                object = intent.getExtras().get("MyInfo");
-                info = (MyInfo) object;
                 info.setContras(lista);
-
+                //List2Json(info,list);
                 Intent intent2 = new Intent(editacontra.this, Principal.class);
                 intent2.putExtra("MyInfo", info);
                 startActivity(intent2);
@@ -119,7 +119,7 @@ public class editacontra extends AppCompatActivity {
 
         if (json == null)
         {
-            Log.d(TAG, "Error BD");
+            Log.d(TAG, "Error json");
         }
         else
         {
