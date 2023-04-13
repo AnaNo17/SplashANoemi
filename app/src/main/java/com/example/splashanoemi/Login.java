@@ -1,6 +1,7 @@
 package com.example.splashanoemi;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.splashanoemi.Json.MyInfo;
+import com.example.splashanoemi.Permisos.Permisos;
 import com.example.splashanoemi.des.MyDesUtil;
 import com.example.splashanoemi.service.BdUser;
 import com.google.gson.Gson;
@@ -37,8 +40,9 @@ public class Login extends AppCompatActivity {
     public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     String json2 = null;
     public static String usr;
+    private boolean tienePermisoCel = false, tienePermisoCamara= false, tienePermisoVibra=false;
+    private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_PERMISOS_CEL=2, CODIGO_PERMISOS_VIBRA=3;
 
-    //modificacion de validar
     private EditText pswds, usuario;
     private TextView txtpas, txtusu;
 
@@ -50,7 +54,10 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        Permisos permisos = new Permisos();
+        permisos.verificarYPedirPermisosDeCamara(getApplicationContext(),Login.this);
+        permisos.verificarYPedirPermisosCel(getApplicationContext(),Login.this);
+        permisos.verificarYPedirPermisosVibra(getApplicationContext(),Login.this);
 
         registro = (Button) findViewById(R.id.RegistroB);
         BdUser Usuariobd = new BdUser(Login.this);
@@ -241,5 +248,35 @@ public class Login extends AppCompatActivity {
         }
         return new String(hexChars);
 
+    }
+    //Para la funcionalidad de los permisos de la App
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Permisos permisos = new Permisos();
+        switch (requestCode) {
+            case CODIGO_PERMISOS_CAMARA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permisos.permisoDeCamaraConcedido(getApplicationContext());
+                } else {
+                    permisos.permisoDeCamaraDenegado(getApplicationContext());
+                }
+                break;
+
+            case CODIGO_PERMISOS_CEL:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permisos.permisoCelConcedido(getApplicationContext());
+                } else {
+                    permisos.permisoCelDenegado(getApplicationContext());
+                }
+                break;
+            case CODIGO_PERMISOS_VIBRA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permisos.permisoVibraConcedido(getApplicationContext());
+                } else {
+                    permisos.permisoVibraDenegado(getApplicationContext());
+                }
+                break;
+        }
     }
 }
