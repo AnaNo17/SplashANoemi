@@ -141,9 +141,21 @@ public class Principal extends AppCompatActivity {
         }
         return false;
     }
-    private void toast( int i )
-    {
+    private void toast( int i ) {
+        MyInfo info = null;
+        Object object = null;
+        Intent intent = getIntent();
+        object = intent.getExtras().get("MyInfo");
+        info = (MyInfo) object;
         Toast.makeText(getBaseContext(), list.get(i).getContra(), Toast.LENGTH_SHORT).show();
+        String Latitud = list.get(i).getLatitud();
+        String Longitud = list.get(i).getLongitud();
+        Intent mapa = new Intent(Principal.this,mapa.class);
+        mapa.putExtra("MyInfo",info);
+        mapa.putExtra("Latitud",Latitud);
+        mapa.putExtra("Longitud",Longitud);
+        startActivity(mapa);
     }
+
 
 }

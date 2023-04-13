@@ -58,7 +58,7 @@ public class BdContras extends UsuariosDBService{
         {
             return null;
         }
-        Log.d(TAG, "" + cursor.getCount());
+        Log.d(TAG, "Cursor" + cursor.getCount());
         contras = new ArrayList<MyData>( );
         for( int i = 0; i < cursor.getCount(); i++)
         {
@@ -68,6 +68,9 @@ public class BdContras extends UsuariosDBService{
             myData.setRed(cursor.getString(2));
             myData.setIdContra(cursor.getInt(3));
             myData.setImage(cursor.getInt(4));
+            myData.setData(cursor.getBlob(5));
+            myData.setLatitud(cursor.getString(6));
+            myData.setLongitud(cursor.getString(7));
             contras.add(myData);
             cursor.moveToNext( );
         }

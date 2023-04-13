@@ -40,7 +40,7 @@ import java.util.List;
 public class olvideContra extends AppCompatActivity {
     Button olvideContra, Regresar;
     EditText usuario;
-    public static final String TAG = "Noemi";
+    public static final String TAG = "Ema";
     public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     byte []res = null;
@@ -68,7 +68,7 @@ public class olvideContra extends AppCompatActivity {
                 String testCifrado = null;
                 String testCifrado2 = null;
                 MyDesUtil myDesUtil2 = null;
-                //Intent intent = getIntent();
+
                 String texto = null;
                 String usu = null;
                 String password = null;
@@ -77,12 +77,13 @@ public class olvideContra extends AppCompatActivity {
                 String correo = null;
 
                 MyInfo info = null;
+
                 usu = usuario.getText().toString();
                 BdUser Usuariobd = new BdUser(olvideContra.this);
                 info = Usuariobd.GetUsuario(usu);
                 if(usu.equals(info.getUsuario())){
                     correo = info.getCorreo();
-                    password = String.format ("NuevaContra%d", (int)(Math.random()*100) );
+                    password = String.format ("ContraNueva%d", (int)(Math.random()*100));
                     mens = "<html>\n" +
                             "    <head>\n" +
                             "        <style type=\"text/css\">\n" +
@@ -110,8 +111,7 @@ public class olvideContra extends AppCompatActivity {
                             "</html>\n";
                     res = createSha1(password+"ola");
                     pass = bytesToHex(res);
-                    correcto = Usuariobd.editaContra(info.getIdUser(),pass);
-                    //List2Json(info,list);
+
                     Log.d(TAG, correo);
                     Log.d(TAG, mens);
                     myDesUtil = new MyDesUtil();
@@ -145,20 +145,20 @@ public class olvideContra extends AppCompatActivity {
                     {
                         Toast.makeText(getBaseContext() , "Text is null" , Toast.LENGTH_LONG );
                     }
-                    if(correcto){
-                        if(sendInfo(testCifrado, testCifrado2))
-                        {
-                            Log.i( TAG , "Registro modificado, Se actualizo");
-                            return;
-                        }else{
-                            Toast.makeText(getBaseContext() , "Error en el envío" , Toast.LENGTH_LONG );
-                        }
+                    if(sendInfo(testCifrado, testCifrado2))
+                    {
+                        Log.i( TAG , "Registro modificado, Se envio");
+                        Toast.makeText(getBaseContext() , "Revise su correo" , Toast.LENGTH_LONG ).show();
                     }else{
-                        Toast.makeText(getBaseContext() , "Error al modificar registro" , Toast.LENGTH_LONG );
+                        Toast.makeText(getBaseContext() , "Error en el envío" , Toast.LENGTH_LONG ).show();
                     }
+
                 }else{
                     Toast.makeText(getBaseContext() , "Usuario incorrecto" , Toast.LENGTH_LONG ).show();
                 }
+                Intent intent2 = new Intent(olvideContra.this,Login2.class);
+                intent2.putExtra("Contrasena", pass);
+                startActivity(intent2);
             }
         });
     }

@@ -58,7 +58,7 @@ public class BdUser extends UsuariosDBService{
         {
             return null;
         }
-        Log.d(TAG, "" + cursor.getCount());
+        Log.d(TAG, "TamanoBd" + cursor.getCount());
         usuarios = new ArrayList<MyInfo>( );
         for( int i = 0; i < cursor.getCount(); i++)
         {

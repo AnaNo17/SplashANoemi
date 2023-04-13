@@ -5,16 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondoagrega"
+    android:onClick="elegirfoto"
     tools:context=".Agregarcontra">
+
 
     <EditText
         android:id="@+id/red"
-        android:layout_width="283dp"
-        android:layout_height="45dp"
+        android:layout_width="189dp"
+        android:layout_height="35dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="232dp"
+        android:layout_marginTop="144dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/back1"
         android:ems="10"
         android:fontFamily="sans-serif-condensed"
@@ -23,17 +24,17 @@
         android:textColor="#FFFEFE"
 
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/nuevacontra"
-        android:layout_width="283dp"
-        android:layout_height="45dp"
+        android:layout_width="177dp"
+        android:layout_height="35dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/back1"
         android:ems="10"
         android:fontFamily="sans-serif-condensed"
@@ -42,80 +43,210 @@
         android:textColor="#FFFEFE"
 
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <TextView
         android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="256dp"
+        android:layout_height="66dp"
         android:backgroundTint="#733248"
         android:fontFamily="sans-serif-black"
         android:text="@string/nuevacontra"
+        android:textAlignment="center"
         android:textColor="#733248"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintHorizontal_bias="0.812"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.227" />
+        app:layout_constraintVertical_bias="0.042" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="315dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#733248"
+        android:fontFamily="sans-serif-black"
+        android:text="Elije una imagen para el icono"
+        android:textAlignment="center"
+        android:textColor="#733248"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.312" />
+
+    <Button
+        android:id="@+id/imagenFoto"
+        android:layout_width="156dp"
+        android:layout_height="57dp"
+        android:backgroundTint="#733248"
+        android:onClick="tomarfoto"
+        android:text="Tomar Foto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.403" />
+
+    <Button
+        android:id="@+id/imagenGaleria"
+        android:layout_width="156dp"
+        android:layout_height="57dp"
+        android:backgroundTint="#733248"
+        android:onClick="elegirfoto"
+        android:text="Subir desde el dispositivo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/regiscontra"
-        android:layout_width="231dp"
-        android:layout_height="58dp"
-        android:backgroundTint="#733248"
+        android:layout_width="156dp"
+        android:layout_height="41dp"
+        android:backgroundTint="#2f4776"
         android:text="Listo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.874"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.615" />
+        app:layout_constraintVertical_bias="0.947" />
 
     <Button
-        android:id="@+id/regresor3"
-        android:layout_width="231dp"
-        android:layout_height="58dp"
-        android:backgroundTint="#733248"
+        android:id="@+id/regresor5"
+        android:layout_width="156dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="236dp"
+        android:backgroundTint="#2f4776"
         android:text="Regresar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.751" />
+        app:layout_constraintVertical_bias="0.947" />
 
     <ImageView
-        android:id="@+id/imageView11"
-        android:layout_width="91dp"
-        android:layout_height="81dp"
-        android:layout_marginBottom="48dp"
-        android:src="@drawable/login"
-        app:layout_constraintBottom_toTopOf="@+id/textView19"
+        android:id="@+id/imageView13"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="284dp"
+        android:src="@drawable/pass"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView12"
         android:layout_width="42dp"
         android:layout_height="39dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/agregar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintHorizontal_bias="0.075"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView13"
-        android:layout_width="180dp"
-        android:layout_height="102dp"
-        android:layout_marginTop="28dp"
-        android:src="@drawable/pass"
+        android:id="@+id/imageView"
+        android:layout_width="186dp"
+        android:layout_height="164dp"
+        android:layout_marginTop="92dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.928"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nuevacontra"
+        app:srcCompat="@drawable/fotonga" />
+
+    <ImageView
+        android:id="@+id/imageView21"
+        android:layout_width="478dp"
+        android:layout_height="312dp"
+        android:layout_marginTop="164dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView12"
+        app:srcCompat="@drawable/papel" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="104dp"
+        android:fontFamily="sans-serif-black"
+        android:text="A partir de su ubicación actual:"
+        android:textColor="#733248"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGaleria"
+        app:layout_constraintVertical_bias="0.308" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="Latitud:"
+        android:textColor="#2f4776"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGaleria"
+        app:layout_constraintVertical_bias="0.394" />
+
+    <TextView
+        android:id="@+id/latitud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="a"
+        android:textColor="#2f4776"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGaleria"
+        app:layout_constraintVertical_bias="0.394" />
+
+    <TextView
+        android:id="@+id/longitud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="a"
+        android:textColor="#2f4776"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.573"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGaleria"
+        app:layout_constraintVertical_bias="0.482" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="Longitud: "
+        android:textColor="#2f4776"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.313"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGaleria"
+        app:layout_constraintVertical_bias="0.482" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

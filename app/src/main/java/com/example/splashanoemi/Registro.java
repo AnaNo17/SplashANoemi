@@ -45,7 +45,7 @@ public class Registro extends AppCompatActivity {
     EditText FechaNac;
     public static final String KEY = "+4xij6jQRSBdCymMxweza/uMYo+o0EUg";
     List<MyData> lista;
-    int []images = { R.drawable.llave,R.drawable.cerrar,R.drawable.llave};
+    int []images = { R.drawable.icono1,R.drawable.icono2,R.drawable.icono3};
     private static final String TAG = "Registro";
     public static final String archivo = "archivo.json";
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
@@ -57,7 +57,7 @@ public class Registro extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
-        lista = new ArrayList<MyData>();
+        lista = null;
         sexoB = (RadioButton)findViewById(R.id.radioBMujer);
         SwitchH= (Switch) findViewById(R.id.idswitch);
         login = (Button)findViewById(R.id.sesion);
@@ -113,12 +113,14 @@ public class Registro extends AppCompatActivity {
                 contrasbd = new BdContras(getBaseContext());
                 BdUser usuariosDB = null;
                 usuariosDB = new BdUser( getBaseContext( ) );
-                int id = 1;
+                int id = 0;
                 if(usuariosDB.getUsuarios() == null){
-                    id = 1;
+                    id = 0;
+                    Log.d("Id usuario", String.valueOf(id));
                 }
                 else{
-                    id = (usuariosDB.getUsuarios().size())+1;
+                    id = (usuariosDB.getUsuarios().size());
+                    Log.d("Id usuario", String.valueOf(id));
                 }
                 res = createSha1(String.valueOf(pswd.getText())+"ola");
                 if( res != null ) {
@@ -142,37 +144,10 @@ public class Registro extends AppCompatActivity {
                 }
 
                 if(SwitchH.isChecked()){
-                    mascotas = "Con mascotas";
+                    mascotas = "Tiene mascotas";
                 }else{
-                    mascotas = "Sin mascotas";
+                    mascotas = "No tiene mascotas";
                 }
-                MyData myData = null;
-                for( int i = 0; i < 3; i++)
-                {
-                    myData = new MyData();
-                    myData.setContra( String.format( "Contraseña%d" , (int)(Math.random()*10000) ) );
-                    if(i==0){
-                        myData.setRed(String.format( "Saes"));
-                        myData.setImage(images[0]);
-                        myData.setIdContra(id);
-                    }
-                    if(i==1){
-                        myData.setRed(String.format( "Correo"));
-                        myData.setImage(images[1]);
-                        myData.setIdContra(id);
-                    }
-                    if(i==2){
-                        myData.setRed(String.format( "Insta" ));
-                        myData.setImage(images[2]);
-                        myData.setIdContra(id);
-                    }
-                    if(contrasbd.saveContra(myData)){
-                        Log.d(TAG,"Contraseña guardada");
-                    }
-                    lista.add(myData);
-                }
-                //List<MyInfo> usuarios = null;
-
                 MyInfo info= new MyInfo();
                 info.setIdUser(id);
                 info.setUsuario(String.valueOf(usuario.getText()));
@@ -189,7 +164,6 @@ public class Registro extends AppCompatActivity {
                 if(usuariosDB.saveUsuario(info)){
                     Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }

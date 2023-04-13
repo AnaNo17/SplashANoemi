@@ -3,6 +3,35 @@ package com.example.splashanoemi.Json;
 import java.io.Serializable;
 
 public class MyData implements Serializable {
+
+    public byte[] getData() {
+        return data;
+    }
+    private String latitud;
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
+
+    private String longitud;
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    private byte[] data;
     public String getContra() {
         return contra;
     }
